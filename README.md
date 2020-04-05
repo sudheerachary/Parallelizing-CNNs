@@ -16,12 +16,6 @@ To train a model, run `train.py` with the desired model architecture and the pat
 python3 train.py -p 10 -b 256 --epochs 10 /scratch/sudheer.achary/Imagenet-orig/ [imagenet-folder with train and val folders]
 ```
 
-The default learning rate schedule starts at 0.1 and decays by a factor of 10 every 30 epochs. This is appropriate for ResNet and models with batch normalization, but too high for AlexNet and VGG. Use 0.01 as the initial learning rate for AlexNet or VGG:
-
-```bash
-python main.py --lr 0.01 [imagenet-folder with train and val folders]
-```
-
 ## Usage
 
 ```
