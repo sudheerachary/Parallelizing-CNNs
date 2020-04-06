@@ -121,7 +121,7 @@ def main():
             'state_dict': model.state_dict(),
             'best_acc1': best_acc1,
             'optimizer' : optimizer.state_dict(),
-        }, is_best)
+        }, is_best, filename='checkpoints/checkpoint_{}_{}.pth'.format(epoch+1, acc1))
 
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
@@ -177,13 +177,13 @@ def validate(val_loader, model, criterion, args):
 
     # switch to evaluate mode
     model.eval()
-
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     with torch.no_grad():
         end = time.time()
         for i, (images, target) in enumerate(val_loader):
 
-            device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-            images.to(device); target.to(device)
+            images = images.to(device)
+            target = target.to(device)
             
             # compute output
             output = model(images)
@@ -207,10 +207,10 @@ def validate(val_loader, model, criterion, args):
     return top1.avg
 
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
+def save_checkpoint(state, is_best, filename='checkpoint.pth'):
     torch.save(state, filename)
     if is_best:
-        shutil.copyfile(filename, 'model_best.pth.tar')
+        shutil.copyfile(filename, 'checkpoints/model_best.pth')
 
 
 class AverageMeter(object):
