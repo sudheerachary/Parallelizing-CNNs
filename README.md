@@ -9,8 +9,8 @@ This implements training of popular model AlexNet on the ImageNet dataset.
     - Then, and move validation images to labeled subfolders, using [the following shell script](https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/valprep.sh)
 
 ## Training
-
-To train a model, run `train.py` with the desired model architecture and the path to the ImageNet dataset:
+![Alexnet Architecture](img/alexnet.png)
+To train a alexnet model, run `train.py` with the desired model architecture and the path to the ImageNet dataset:
 
 ```bash
 python3 train.py -p 10 -b 256 --epochs 10 /scratch/sudheer.achary/Imagenet-orig/ [imagenet-folder with train and val folders]
@@ -48,3 +48,9 @@ optional arguments:
   --pretrained          use pre-trained model
   --seed SEED           seed for initializing training.
 ```
+
+## Results
+
+![result-1](img/results-1.png)
+![result-1](img/results-2.png)
+
