@@ -1,16 +1,14 @@
+import sys
+import torch
 from alexnet import *
-model = alexnet(pretrained=True, progress=True, num_classes=1000)
+model = alexnet(pretrained=False, progress=True, num_classes=1000)
+x = torch.load(sys.argv[1])
+model.load_state_dict(x["state_dict"])
 model.eval()
 
-import urllib
-url, filename = ("https://github.com/pytorch/hub/raw/master/dog.jpg", "dog.jpg")
-try: urllib.URLopener().retrieve(url, filename)
-except: urllib.request.urlretrieve(url, filename)
-
-import torch
 from PIL import Image
 from torchvision import transforms
-input_image = Image.open(filename)
+input_image = Image.open(sys.argv[2])
 preprocess = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),
@@ -29,9 +27,17 @@ with torch.no_grad():
     output = model(input_batch)
 # The output has unnormalized scores. To get probabilities, you can run a softmax on it.
 output = torch.nn.functional.softmax(output[0], dim=0)
-confidence = torch.max(output).item()*100.0
-class_label = torch.argmax(output).item()
+
+top5 = torch.topk(output, k=5)
+
+confidences = []; class_labels = []
+for i in range(5):
+    confidences.append(top5.values[i].item()*100)
+    class_labels.append(top5.indices[i].item())
+
 with open('labels.txt', 'r') as f:
     lines = f.readlines()
-class_label = lines[class_label].split(':')[1]
-print("Confidence: {} \n Class: {}".format(confidence, class_label))
+
+for i in range(5):
+    class_label = lines[class_labels[i]].split(':')[1]
+    print("{} ({})".format(class_label, confidences[i]))

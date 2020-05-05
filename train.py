@@ -121,7 +121,7 @@ def main():
             'state_dict': model.state_dict(),
             'best_acc1': best_acc1,
             'optimizer' : optimizer.state_dict(),
-        }, is_best, filename='/scratch/sudheer.achary/checkpoints/checkpoint_{}_{}.pth'.format(epoch+1, acc1))
+        }, is_best, filename='/scratch/sudheer.achary/checkpoints_dual/checkpoint_{}_{}.pth'.format(epoch+1, acc1))
 
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
@@ -207,7 +207,7 @@ def validate(val_loader, model, criterion, args):
 def save_checkpoint(state, is_best, filename='checkpoint.pth'):
     torch.save(state, filename)
     if is_best:
-        shutil.copyfile(filename, '/scratch/sudheer.achary/checkpoints/model_best.pth')
+        shutil.copyfile(filename, '/scratch/sudheer.achary/checkpoints_dual/model_best.pth')
 
 
 class AverageMeter(object):
